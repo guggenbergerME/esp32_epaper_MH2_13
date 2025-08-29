@@ -1,35 +1,15 @@
 /*
-Original Setup
-***************
-BUSY -> 25, 
-RST -> 26, 
-DC -> 27, 
-CS-> 15, 
-CLK -> 13, 
-DIN -> 14
 
-Beispiel https://www.industrialshields.com/blog/arduino-industrial-1/how-to-connect-7-5-e-paper-display-esp32-320
-busy  4
-RST   16
-DC    17
-CS    5
-CLK   18
-MOSI  23
-
-
-
-ESP32 Wroom 32
-**************
+ESP32 Wroom 32 Pinbelegung
+#########################################
 epaper      ESP32
 #############################
-Vcc         3V3
-GND         GND
-D/C         D02
-SDI:MOSI    D23
-CS          D05
-CLK:SCK     D18
-RST         D26
-BUSY        D25
+BUSY        4
+RST         16
+DC          17
+CS          5
+CLK         18
+MOSI        23
 */
 
 
@@ -38,7 +18,7 @@ BUSY        D25
 
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
-#define ENABLE_GxEPD2_GFX 0
+//#define ENABLE_GxEPD2_GFX 0
 
 // uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
 //#include <GFX.h>
@@ -51,76 +31,50 @@ BUSY        D25
 #include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
-// select the display class (only one), matching the kind of display panel
-//#define GxEPD2_DISPLAY_CLASS GxEPD2_BW
+
+
 #define GxEPD2_DISPLAY_CLASS GxEPD2_3C
-//#define GxEPD2_DISPLAY_CLASS GxEPD2_4C
-//#define GxEPD2_DISPLAY_CLASS GxEPD2_7C
 
-
-
-//#define GxEPD2_DRIVER_CLASS GxEPD2_266_GDEY0266T90 // GDEY0266T90 152x296, SSD1680, (FPC-A003 HB)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
 #define GxEPD2_DRIVER_CLASS GxEPD2_266c     // GDEY0266Z90 152x296, SSD1680, (FPC-7510)
 
 
 
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290     // GDEH029A1   128x296, SSD1608 (IL3820), (E029A01-FPC-A1 SYX1553)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5  // GDEW029T5   128x296, UC8151 (IL0373), (WFT0290CZ10)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5D // GDEW029T5D  128x296, UC8151D, (WFT0290CZ10)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_I6FD // GDEW029I6FD  128x296, UC8151D, (WFT0290CZ10)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94 // GDEM029T94  128x296, SSD1680, (FPC-7519 rev.b)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94_V2 // GDEM029T94  128x296, SSD1680, (FPC-7519 rev.b), Waveshare 2.9" V2 variant
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_BS // DEPG0290BS  128x296, SSD1680, (FPC-7519 rev.b)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_M06 // GDEW029M06  128x296, UC8151D, (WFT0290CZ10)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290c     // GDEW029Z10  128x296, UC8151 (IL0373), (WFT0290CZ10)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_Z13c // GDEH029Z13  128x296, UC8151D, (HINK-E029A10-A3 20160809)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_C90c // GDEM029C90  128x296, SSD1680, (FPC-7519 rev.b)
-
-
 // somehow there should be an easier way to do this
-#define GxEPD2_BW_IS_GxEPD2_BW true
+//#define GxEPD2_BW_IS_GxEPD2_BW true
 #define GxEPD2_3C_IS_GxEPD2_3C true
-#define GxEPD2_7C_IS_GxEPD2_7C true
-#define GxEPD2_1248_IS_GxEPD2_1248 true
+//#define GxEPD2_7C_IS_GxEPD2_7C true
+//#define GxEPD2_1248_IS_GxEPD2_1248 true
 #define IS_GxEPD(c, x) (c##x)
-#define IS_GxEPD2_BW(x) IS_GxEPD(GxEPD2_BW_IS_, x)
+//#define IS_GxEPD2_BW(x) IS_GxEPD(GxEPD2_BW_IS_, x)
 #define IS_GxEPD2_3C(x) IS_GxEPD(GxEPD2_3C_IS_, x)
-#define IS_GxEPD2_7C(x) IS_GxEPD(GxEPD2_7C_IS_, x)
-#define IS_GxEPD2_1248(x) IS_GxEPD(GxEPD2_1248_IS_, x)
+//#define IS_GxEPD2_7C(x) IS_GxEPD(GxEPD2_7C_IS_, x)
+//#define IS_GxEPD2_1248(x) IS_GxEPD(GxEPD2_1248_IS_, x)
 
 #if defined(ESP32)
 #define MAX_DISPLAY_BUFFER_SIZE 65536ul // e.g.
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
+#if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
 #endif
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 5, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 #endif
 
-// alternately you can copy the constructor from GxEPD2_display_selection.h of GxEPD_Example to here
-// and adapt it to the ESP32 Driver wiring, e.g.
-//GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display(GxEPD2_154_D67(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // GDEH0154D67
 
 // comment out unused bitmaps to reduce code space used
-#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 #include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 #include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
-#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
-#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
-#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
-#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
+//#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+//#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
+//#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
+//#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
+
 // 3-color
 
-#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
+#//include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
-#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
-#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
-#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+//#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
+//#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
+//#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 
 #if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
 SPIClass hspi(HSPI);
