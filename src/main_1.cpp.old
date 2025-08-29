@@ -8,16 +8,6 @@ CS-> 15,
 CLK -> 13, 
 DIN -> 14
 
-Beispiel https://www.industrialshields.com/blog/arduino-industrial-1/how-to-connect-7-5-e-paper-display-esp32-320
-busy  4
-RST   16
-DC    17
-CS    5
-CLK   18
-MOSI  23
-
-
-
 ESP32 Wroom 32
 **************
 epaper      ESP32
@@ -28,13 +18,31 @@ D/C         D02
 SDI:MOSI    D23
 CS          D05
 CLK:SCK     D18
-RST         D26
-BUSY        D25
+
+
+ESP32	        e-Paper Display
+
+GPIO5-	        CS
+GPIO16	      RST
+GPIO17	      DC
+GPIO18	      CLK
+GPIO23	      DIN
+3.3V	        VCC
+GND	          GND
+
+
+
+Beispiel
+https://www.reddit.com/r/esp32/comments/18bhl9u/esp32_waveshare_epaper_display/
+Github LGxEPD
+https://github.com/ZinggJM/GxEPD
 */
 
 
+
+
 // uncomment next line to use HSPI for EPD (and VSPI for SD), e.g. with Waveshare ESP32 Driver Board
-//#define USE_HSPI_FOR_EPD
+#define USE_HSPI_FOR_EPD
 
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
@@ -45,15 +53,15 @@ BUSY        D25
 // Note: if you use this with ENABLE_GxEPD2_GFX 1:
 //       uncomment it in GxEPD2_GFX.h too, or add #include <GFX.h> before any #include <GxEPD2_GFX.h>
 
-//#include <GxEPD2_BW.h>
+#include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
 // select the display class (only one), matching the kind of display panel
-//#define GxEPD2_DISPLAY_CLASS GxEPD2_BW
-#define GxEPD2_DISPLAY_CLASS GxEPD2_3C
+#define GxEPD2_DISPLAY_CLASS GxEPD2_BW
+//#define GxEPD2_DISPLAY_CLASS GxEPD2_3C
 //#define GxEPD2_DISPLAY_CLASS GxEPD2_4C
 //#define GxEPD2_DISPLAY_CLASS GxEPD2_7C
 
@@ -61,7 +69,7 @@ BUSY        D25
 
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266_GDEY0266T90 // GDEY0266T90 152x296, SSD1680, (FPC-A003 HB)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
-#define GxEPD2_DRIVER_CLASS GxEPD2_266c     // GDEY0266Z90 152x296, SSD1680, (FPC-7510)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_266c     // GDEY0266Z90 152x296, SSD1680, (FPC-7510)
 
 
 
@@ -99,7 +107,7 @@ BUSY        D25
 #elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
 #endif
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 5, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25));
 #endif
 
 // alternately you can copy the constructor from GxEPD2_display_selection.h of GxEPD_Example to here
