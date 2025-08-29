@@ -60,21 +60,25 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 
 
 // comment out unused bitmaps to reduce code space used
-#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 #include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 #include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
-#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
-#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
-#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
-#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
+//#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+//#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
+//#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
+//#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
 
 // 3-color
 
-#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
+//#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
-#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
-#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
-#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+//#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
+//#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
+//#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+
+//#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+//SPIClass hspi(HSPI);
+//#endif
 
 //************************************************************************** Funktionsprototypen
 void loop                       ();
@@ -111,6 +115,14 @@ void setup()
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
+  // *** special handling for Waveshare ESP32 Driver board *** //
+  // ********************************************************* //
+//#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+//  hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
+//  display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+//#endif
+  // *** end of special handling for Waveshare ESP32 Driver board *** //
+  // **************************************************************** //
   display.init(115200);
   // first update should be full refresh
   helloWorld();
@@ -123,7 +135,7 @@ void setup()
   delay(1000);
   helloEpaper();
   delay(1000);
-  showFont("Schrifttest", &FreeMonoBold9pt7b);
+  showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
   delay(1000);
   drawBitmaps();
   if (display.epd2.hasPartialUpdate)
@@ -131,9 +143,9 @@ void setup()
     showPartialUpdate();
     delay(1000);
   } // else // on GDEW0154Z04 only full update available, doesn't look nice
-  
-  showBox(16, 16, 48, 32, false);
-  showBox(16, 56, 48, 32, true);
+  //drawCornerTest();
+  //showBox(16, 16, 48, 32, false);
+  //showBox(16, 56, 48, 32, true);
   display.powerOff();
   deepSleepTest();
   Serial.println("setup done");
@@ -148,14 +160,14 @@ void loop()
 // the size is increased in setPartialWindow() if x or w are not multiple of 8 for even rotation, y or h for odd rotation
 // see also comment in GxEPD2_BW.h, GxEPD2_3C.h or GxEPD2_GFX.h for method setPartialWindow()
 
-const char HelloWorld[] = "GIMA Preisschild";
+const char HelloWorld[] = "GIMA ePaper";
 const char HelloArduino[] = "Hello Arduino!";
 const char HelloEpaper[] = "Hello E-Paper!";
 
 void helloWorld()
 {
   //Serial.println("helloWorld");
-  display.setRotation(3);
+  display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
@@ -182,7 +194,7 @@ void helloWorldForDummies()
   // most e-papers have width < height (portrait) as native orientation, especially the small ones
   // in GxEPD2 rotation 0 is used for native orientation (most TFT libraries use 0 fix for portrait orientation)
   // set rotation to 1 (rotate right 90 degrees) to have enough space on small displays (landscape)
-  display.setRotation(3);
+  display.setRotation(1);
   // select a suitable font in Adafruit_GFX
   display.setFont(&FreeMonoBold9pt7b);
   // on e-papers black on white is more pleasant to read
@@ -224,12 +236,12 @@ void helloWorldForDummies()
 void helloFullScreenPartialMode()
 {
   //Serial.println("helloFullScreenPartialMode");
-  const char fullscreen[] = "Vollbild";
+  const char fullscreen[] = "full screen update";
   const char fpm[] = "fast partial mode";
   const char spm[] = "slow partial mode";
   const char npm[] = "no partial mode";
   display.setPartialWindow(0, 0, display.width(), display.height());
-  display.setRotation(3);
+  display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
   const char* updatemode;
@@ -277,7 +289,7 @@ void helloFullScreenPartialMode()
 void helloArduino()
 {
   //Serial.println("helloArduino");
-  display.setRotation(3);
+  display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
@@ -307,7 +319,7 @@ void helloArduino()
 void helloEpaper()
 {
   //Serial.println("helloEpaper");
-  display.setRotation(3);
+  display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
@@ -335,11 +347,11 @@ void helloEpaper()
 void deepSleepTest()
 {
   //Serial.println("deepSleepTest");
-  const char hibernating[] = "Tiefschlaf ...";
-  const char wokeup[] = "aufwachen";
-  const char from[] = "aus dem Tiefschlaf";
-  const char again[] = "loading";
-  display.setRotation(3);
+  const char hibernating[] = "hibernating ...";
+  const char wokeup[] = "woke up";
+  const char from[] = "from deep sleep";
+  const char again[] = "again";
+  display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
@@ -398,7 +410,7 @@ void deepSleepTest()
 void showBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
 {
   //Serial.println("showBox");
-  display.setRotation(3);
+  display.setRotation(1);
   if (partial)
   {
     display.setPartialWindow(x, y, w, h);
@@ -444,7 +456,7 @@ void drawCornerTest()
 void showFont(const char name[], const GFXfont* f)
 {
   display.setFullWindow();
-  display.setRotation(3);
+  display.setRotation(0);
   display.setTextColor(GxEPD_BLACK);
   display.firstPage();
   do
@@ -456,7 +468,7 @@ void showFont(const char name[], const GFXfont* f)
 
 void drawFont(const char name[], const GFXfont* f)
 {
-  display.setRotation(3);
+  //display.setRotation(0);
   display.fillScreen(GxEPD_WHITE);
   display.setTextColor(GxEPD_BLACK);
   display.setFont(f);
@@ -594,8 +606,6 @@ void drawBitmaps()
 }
 
 #ifdef _GxBitmaps200x200_H_
-
-
 void drawBitmaps200x200()
 {
 #if defined(__AVR)
