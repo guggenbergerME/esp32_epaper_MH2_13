@@ -335,10 +335,10 @@ void helloEpaper()
 void deepSleepTest()
 {
   //Serial.println("deepSleepTest");
-  const char hibernating[] = "Tiefschlaf ...";
+  const char hibernating[] = "GIMA ePaper";
   const char wokeup[] = "aufwachen";
   const char from[] = "aus dem Tiefschlaf";
-  const char again[] = "loading";
+  const char again[] = "Preis ab 5,99 EUR";
   display.setRotation(3);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
